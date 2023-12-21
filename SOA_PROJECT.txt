@@ -1,0 +1,169 @@
+project link
+ 
+https://typetestyash.ccbp.tech
+
+
+
+ HTML CODE
+
+<!DOCTYPE html>
+<html>
+
+<head>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous" />
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js" integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js" integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js" integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV" crossorigin="anonymous"></script>
+</head>
+
+<body>
+    <div class="container p-3">
+        <div class="row">
+            <div class="col-12" id="speedTypingTest">
+                <h1 class="heading"> Speed Typing Test </h1>
+                <p class="paragraph">On your fingers lets set Go!</p>
+                <div class="d-flex flex-row">
+                    <img src="https://assets.ccbp.in/frontend/dynamic-webapps/clock-img.png" class="image-element" />
+                    <p class="span-element" id="timer">0</p>
+                    <p class="paragraph ml-2 mt-4">Seconds</p>
+                </div>
+                <div class="col-12">
+                    <div class="description-container ml-3 mr-3 mb-3 p-4">
+                        <p class="paragraph-description" id="quoteDisplay"></p>
+                        <textarea placeholder="Type Here" rows="6" cols="30" class="textarea-element ml-4 mt-4 mr-4 mb-4" id="quoteInput"></textarea>
+
+                    </div>
+                    <div class="text-center text-light mt-3">
+                        <div id="spinner" class="d-none spinner-border" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                    </div>
+                    <p class="paragraph-description" id="result"></p>
+                    <button class="button-element ml-3 mr-4" id="submitBtn">Submit</button>
+                    <button class="button-light" id="resetBtn">Reset</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+
+</html>
+
+CSS CODE
+
+@import url("https://fonts.googleapis.com/css2?family=Bree+Serif&family=Caveat:wght@400;700&family=Lobster&family=Monoton&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Playfair+Display+SC:ital,wght@0,400;0,700;1,700&family=Playfair+Display:ital,wght@0,400;0,700;1,700&family=Roboto:ital,wght@0,400;0,700;1,400;1,700&family=Source+Sans+Pro:ital,wght@0,400;0,700;1,700&family=Work+Sans:ital,wght@0,400;0,700;1,700&display=swap");
+
+.container {
+    background-color: #dac0ff;
+}
+
+.heading {
+    color: #690cb0;
+    font-family: "Roboto";
+    font-weight: 800;
+}
+
+.paragraph {
+    color: #323f4b;
+    font-family: "Roboto";
+    font-weight: 300;
+}
+
+.image-element {
+    height: 30px;
+    width: 30px;
+}
+
+.span-element {
+    color: #3e4c59;
+}
+
+.description-container {
+    border-color: #9aa5b1;
+    border-radius: 4px;
+    background-color: #ffffff;
+}
+
+.paragraph-description {
+    color: #323f4b;
+    font-family: "Roboto";
+    font-weight: 400;
+}
+
+.textarea-element {
+    border-color: #9aa5b1;
+    border-radius: 3px;
+}
+
+.button-element {
+    color: #ffffff;
+    background-color: #690cb0;
+    border-radius: 3px;
+    padding: 4px;
+}
+
+.button-light {
+    color: #3e4c59;
+    background-color: #ffffff;
+    border-radius: 3px;
+    padding: 4px;
+}
+
+
+ JAVA SCRIPT
+
+let speedTypingTestEl = document.getElementById("speedTypingTest");
+let timerEl = document.getElementById("timer");
+let quoteDisplayEl = document.getElementById("quoteDisplay");
+let resultEl = document.getElementById("result");
+let quoteInputEl = document.getElementById("quoteInput");
+let submitBtnEl = document.getElementById("submitBtn");
+let resetBtnEl = document.getElementById("resetBtn");
+let spinnerEl = document.getElementById("spinner");
+
+spinnerEl.classList.add("d-none");
+let counter = 0;
+
+function startCounter() {
+    counter = counter + 1;
+    timerEl.textContent = counter;
+}
+let timerId = setInterval(startCounter, 1000);
+
+function toGetRandomQuote() {
+    let url = "https://apis.ccbp.in/random-quote";
+    let options = {
+        method: "GET"
+    };
+    fetch(url, options)
+        .then(function(response) {
+            return response.json();
+        })
+        .then(function(jsonData) {
+            spinnerEl.classList.add("d-none");
+            let quote = jsonData.content;
+            quoteDisplayEl.textContent = quote;
+            console.log(jsonData);
+        });
+}
+toGetRandomQuote();
+startCounter();
+
+resetBtnEl.onclick = function() {
+    spinnerEl.classList.remove("d-none");
+    toGetRandomQuote();
+    startCounter();
+    counter = 0;
+    resultEl.textContent = "";
+    quoteInputEl.value = "";
+
+};
+
+submitBtnEl.onclick = function() {
+    if (quoteInputEl.value === quoteDisplayEl.textContent) {
+        clearInterval(timerId);
+        resultEl.textContent = "You typed In " + counter + " seconds";
+    } else {
+        resultEl.textContent = "You typed Incorrect sentence";
+    }
+};
